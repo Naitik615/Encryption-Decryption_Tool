@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encryption/Decryption Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        <!-- body {
+            font-family: 'JetBrains Mono', monospace;
+            margin: 0;
+            padding: 0;
+            color: #ffffff;
+            background-color: #1a202c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 20px;
+            padding: 20px;
+            background-color: #2d3748;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .heading {
+            font-size: 2rem;
+            color: #70ecaa;
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        .input-container label {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+
+        .input-container input {
+            padding: 10px;
+            border: 2px solid #4a5568;
+            border-radius: 5px;
+            color: #a0aec0;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+            background-color: #2d3748; 
+        }
+
+        .input-container input:focus {
+            border-color: #4F46E5;
+        }
+
+        .input-container button {
+            padding: 10px;
+            margin-top: 15px;
+            background: linear-gradient(90deg, #ff00d4, #00ddff);
+            color: #dad9d9;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .input-container button:hover {
+            background: linear-gradient(90deg,  #921387, #005731);
+        }
+
+        .output-box {
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #4a5568;
+            border-radius: 5px;
+            color: #a0aec0;
+            background-color: #2d3748;
+            font-size: 1rem;
+            min-height: 80px;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            text-align: left;
+            transition: background-color 0.3s ease;
+        }
+
+
+        .copy-btn {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background-color: #06B6D4;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .copy-btn:hover {
+            background-color: #0CB3C1;
+        }
+
+        .error {
+            color: red;
+            font-size: 1rem;
+        }
+
+        .notation {
+            font-size: 1.1rem;
+            color: #ffffff;
+            margin-top: 10px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: #ccd0d5;
+            border-radius: 4px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: #a8adb3;
+        }
+
+
+        @media (max-width: 900px) {
+            .container {
+                padding: 15px;
+            }
+
+            .heading {
+                font-size: 1.5rem;
+            }
+
+            .input-container input {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .input-container button {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .output-box {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+            .copy-btn {
+                font-size: 0.8rem;
+                padding: 7px 12px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 0;
+                padding: 10px;
+            }
+
+            .heading {
+                font-size: 1.2rem;
+            }
+
+            .input-container input,
+            .input-container button {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+
+            .output-box {
+                font-size: 0.8rem;
+                padding: 6px;
+            }
+
+            .copy-btn {
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="heading">🔐 Encryption/Decryption Tool 🔓</div>
+        <div class="input-container">
+            <label for="text">Enter text to Encrypt/Decrypt:</label>
+            <input type="text" id="text" placeholder="Enter text here..." />
+            <button id="encrypt-btn" class="text-gray-600">Encrypt Text</button>
+            <button id="decrypt-btn" class="text-gray-600">Decrypt Text</button>
+        </div>
+
+        <div class="notation" id="notation">Your result will appear here...</div>
+        <div class="output-box" id="output-box">Your result will appear here...</div>
+        <button class="copy-btn" id="copy-btn" style="display: none;">Copy Result</button>
+
+        <div class="error" id="error-msg"></div>
+    </div>
+
+    <script>
+        document.getElementById('encrypt-btn').addEventListener('click', function() {
+            const text = document.getElementById('text').value;
+            if (text) {
+                fetch('/encrypt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.encryptedText) {
+                        document.getElementById('notation').textContent = "Encrypted Text 🛡️:";
+                        document.getElementById('output-box').textContent = `${data.encryptedText}`;
+                        document.getElementById('copy-btn').style.display = 'inline-block';
+                    } else {
+                        document.getElementById('output-box').textContent = '❌ Error: ' + data.error;
+                    }
+                });
+            }
+        });
+
+        document.getElementById('decrypt-btn').addEventListener('click', function() {
+            const text = document.getElementById('text').value;
+            if (text) {
+                fetch('/decrypt', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.decryptedText) {
+                        document.getElementById('notation').textContent = "Decrypted Text 🤭:";
+                        document.getElementById('output-box').textContent = `${data.decryptedText}`;
+                        document.getElementById('copy-btn').style.display = 'inline-block';
+                    } else {
+                        document.getElementById('output-box').textContent = '❌ Error: ' + data.error;
+                    }
+                });
+            }
+        });
+
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const result = document.getElementById('output-box').textContent;
+            navigator.clipboard.writeText(result);
+        });
+    </script>
+</body>
+</html>
